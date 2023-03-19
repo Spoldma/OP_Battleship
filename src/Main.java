@@ -32,7 +32,7 @@ public class Main {
         System.out.println("Vasakul: sinu laevad; Paremal: vastase laevad");
         mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
         while (paatideArv > 0) {
-            küsiLasku(pcBoolean);
+            küsiLasku(pcBoolean, pcString);
             mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
         }
         System.out.println("Mäng läbi!");
@@ -98,7 +98,8 @@ public class Main {
         System.out.println();
 
         BufferedReader reader2 = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Sisesta paatide arv (0 - suurus**2): ");
+        int maxPaadid = (int) Math.pow(Integer.parseInt(suurus), 2);
+        System.out.print("Sisesta paatide arv (0 - " + maxPaadid + "): ");
         String paatideArv = reader2.readLine();
         väärtused[1] = Integer.parseInt(paatideArv);
         System.out.println();
@@ -106,7 +107,7 @@ public class Main {
         return väärtused;
     }
 
-    public static void küsiLasku(MänguVäli pcBoolean) throws IOException {
+    public static void küsiLasku(MänguVäli pcBoolean, KuvaVäli pcString) throws IOException {
         int väljaSuurus = pcBoolean.getVäli().length;
         int rida = 0;
         int veerg = 0;
@@ -117,9 +118,11 @@ public class Main {
         veerg = Integer.parseInt(koordinaadid[1]);
         if (rida < väljaSuurus && veerg < väljaSuurus && pcBoolean.pihtaMööda(rida, veerg)) {
                 pcBoolean.eemaldaPaat(rida, veerg);
+                pcString.uuendaVäli(rida, veerg, true);
                 System.out.println("Pihtas");
         } else if (rida < väljaSuurus && Integer.parseInt(koordinaadid[1]) < väljaSuurus) {
             pcBoolean.lisaPaat(rida, veerg);
+            pcString.uuendaVäli(rida, veerg, false);
             System.out.println("Lasid mööda");
         } else {
             System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
