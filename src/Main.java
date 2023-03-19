@@ -102,8 +102,8 @@ public class Main {
         return väärtused;
     }
 
-    public static void küsiLasku(MänguVäli playerBoolean, int paate) throws IOException {
-        int väljaSuurus = playerBoolean.getVäli().length;
+    public static void küsiLasku(MänguVäli pcBoolean, int paate) throws IOException {
+        int väljaSuurus = pcBoolean.getVäli().length;
         int paadid = paate;
         int rida = 0;
         int veerg = 0;
@@ -113,12 +113,12 @@ public class Main {
             String[] koordinaadid = reader.readLine().split(",");
             rida = Integer.parseInt(koordinaadid[0]);
             veerg = Integer.parseInt(koordinaadid[1]);
-            if (rida < väljaSuurus && veerg < väljaSuurus && playerBoolean.pihtaMööda(rida, veerg)) {
-                playerBoolean.eemaldaPaat(rida, veerg);
-                System.out.println();
+            if (rida < väljaSuurus && veerg < väljaSuurus && pcBoolean.pihtaMööda(rida, veerg)) {
+                pcBoolean.eemaldaPaat(rida, veerg);
+                System.out.println("Pihtas");
                 paadid--;
             } else if (rida < väljaSuurus && Integer.parseInt(koordinaadid[1]) < väljaSuurus) {
-                System.out.println();
+                System.out.println("Lasid mööda");
             } else {
                 System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
             }
