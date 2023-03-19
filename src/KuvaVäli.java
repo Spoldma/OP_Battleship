@@ -1,11 +1,11 @@
-public class KuvaVäli {
-    private String[][] playerVäli;
-    private String[][] arvutiVäli;
+public class KuvaVäli extends Väli {
+    private String[][] Väli;
 
-    public KuvaVäli(String[][] playerVäli, String[][] arvutiVäli) {
-        this.playerVäli = playerVäli;
-        this.arvutiVäli = arvutiVäli;
+    public KuvaVäli(String[][] Väli) {
+        this.Väli = Väli;
     }
 
-    public void
+    public String[][] getVäli() {
+        return Väli;
+    }
 }

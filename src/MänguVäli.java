@@ -1,4 +1,4 @@
-public class MänguVäli {
+public class MänguVäli extends Väli {
     private boolean[][] väli;
 
     public MänguVäli(boolean[][] väli) {
@@ -6,13 +6,18 @@ public class MänguVäli {
     }
 
     public boolean pihtaMööda(int i, int j) {
-        if (this.väli[i][j]) {
-            xMeetod("X");
-            this.väli[i][j] = false;
-            return true;
-        }
-        xMeetod("O");
-        return false;
+        return this.väli[i][j];
+    }
 
+    public void eemaldaPaat(int i, int j) {
+        this.väli[i][j] = false;
+    }
+
+    public void lisaPaat(int i, int j){
+        this.väli[i][j] = true;
+    }
+
+    public boolean[][] getVäli() {
+        return väli;
     }
 }
