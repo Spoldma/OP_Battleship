@@ -106,7 +106,7 @@ public class Main {
         return väärtused;
     }
 
-    public static void küsiLasku(MänguVäli pcBoolean, int paatideArv) throws IOException {
+    public static void küsiLasku(MänguVäli pcBoolean) throws IOException {
         int väljaSuurus = pcBoolean.getVäli().length;
         int rida = 0;
         int veerg = 0;
