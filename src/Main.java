@@ -31,7 +31,11 @@ public class Main {
         System.out.println("Mäng algab!");
         System.out.println("Vasakul: sinu laevad; Paremal: vastase laevad");
         mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
-        küsiLasku(playerBoolean, paatideArv);
+        while (paatideArv > 0) {
+            küsiLasku(pcBoolean);
+            mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
+        }
+        System.out.println("Mäng läbi!");
     }
 
     //genereerib suvalise n*n boolean maatriksi, milles etteantud arv ühtesi
@@ -102,26 +106,23 @@ public class Main {
         return väärtused;
     }
 
-    public static void küsiLasku(MänguVäli pcBoolean, int paate) throws IOException {
+    public static void küsiLasku(MänguVäli pcBoolean, int paatideArv) throws IOException {
         int väljaSuurus = pcBoolean.getVäli().length;
-        int paadid = paate;
         int rida = 0;
         int veerg = 0;
-        while (paadid > 0) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Sisesta laskmiseks koordinaadid (rida,veerg): ");
-            String[] koordinaadid = reader.readLine().split(",");
-            rida = Integer.parseInt(koordinaadid[0]);
-            veerg = Integer.parseInt(koordinaadid[1]);
-            if (rida < väljaSuurus && veerg < väljaSuurus && pcBoolean.pihtaMööda(rida, veerg)) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Sisesta laskmiseks koordinaadid (rida,veerg): ");
+        String[] koordinaadid = reader.readLine().split(",");
+        rida = Integer.parseInt(koordinaadid[0]);
+        veerg = Integer.parseInt(koordinaadid[1]);
+        if (rida < väljaSuurus && veerg < väljaSuurus && pcBoolean.pihtaMööda(rida, veerg)) {
                 pcBoolean.eemaldaPaat(rida, veerg);
                 System.out.println("Pihtas");
-                paadid--;
-            } else if (rida < väljaSuurus && Integer.parseInt(koordinaadid[1]) < väljaSuurus) {
-                System.out.println("Lasid mööda");
-            } else {
-                System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
-            }
+        } else if (rida < väljaSuurus && Integer.parseInt(koordinaadid[1]) < väljaSuurus) {
+            pcBoolean.lisaPaat(rida, veerg);
+            System.out.println("Lasid mööda");
+        } else {
+            System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
         }
     }
 
