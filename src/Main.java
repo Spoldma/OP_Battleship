@@ -29,15 +29,14 @@ public class Main {
 
         //Mäng algab
         System.out.println("Mäng algab!");
-        System.out.println("Vasakul: sinu laevad; Paremal: vastase laevad");
+        System.out.println("Vasakul on sinu laevad | Paremal on vastase laevad");
         mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
-        while (paatideArv > 0) {
-            küsiLasku(pcBoolean, pcString);
+        while (pcString.loeTäisTabamusi() != paatideArv) {
+            küsiLasku(pcBoolean, pcString, paatideArv);
             mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
-            if (paatideKontroll(pcString))
-                paatideArv--;
         }
         System.out.println("Mäng läbi!");
+
     }
 
     //genereerib suvalise n*n boolean maatriksi, milles etteantud arv ühtesi
@@ -109,7 +108,7 @@ public class Main {
         return väärtused;
     }
 
-    public static void küsiLasku(MänguVäli pcBoolean, KuvaVäli pcString) throws IOException {
+    public static void küsiLasku(MänguVäli pcBoolean, KuvaVäli pcString, int paadid) throws IOException {
         int väljaSuurus = pcBoolean.getVäli().length;
         int rida = 0;
         int veerg = 0;
@@ -119,13 +118,13 @@ public class Main {
         rida = Integer.parseInt(koordinaadid[0]);
         veerg = Integer.parseInt(koordinaadid[1]);
         if (rida < väljaSuurus && veerg < väljaSuurus && pcBoolean.pihtaMööda(rida, veerg)) {
-                pcBoolean.eemaldaPaat(rida, veerg);
-                pcString.uuendaVäli(rida, veerg, true);
-                System.out.println("Pihtas");
+            pcBoolean.eemaldaPaat(rida, veerg);
+            pcString.uuendaVäli(rida, veerg, true);
+            System.out.println("Pihtas!");
         } else if (rida < väljaSuurus && Integer.parseInt(koordinaadid[1]) < väljaSuurus) {
             pcBoolean.lisaPaat(rida, veerg);
             pcString.uuendaVäli(rida, veerg, false);
-            System.out.println("Lasid mööda");
+            System.out.println("Lasid mööda, proovi veel!");
         } else {
             System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
         }
@@ -138,11 +137,11 @@ public class Main {
 
     //laseb mängijal paigutada oma laevad
     public static void paigutaLaevad(MänguVäli playerBoolean, int paate) throws IOException {
-        System.out.println("Peate väljale paigutama " + paate + " paati!");
+        System.out.println("Väljale paigutavate paatide arv: " + paate);
         int väljaSuurus = playerBoolean.getVäli().length;
         int paateAlles = paate;
         while (paateAlles > 0) {
-            System.out.println("Teie praegune väli näeb välja nii: ");
+            System.out.println("Sinu praegune väli on selline: ");
             playerBoolean.prindiVäli(teeVäliString(playerBoolean.getVäli()));
             System.out.println("Paate veel sisestada: " + paateAlles);
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -156,14 +155,5 @@ public class Main {
                 System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
             }
         }
-    }
-    public static boolean paatideKontroll(KuvaVäli pcString) {
-        int n = pcString.getVäli().length;
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                return pcString.getVäli()[i][j].equals("X");
-            }
-        }
-        return false;
     }
 }
