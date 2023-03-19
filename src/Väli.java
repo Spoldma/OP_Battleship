@@ -8,11 +8,13 @@ public class Väli {
             System.out.println(Arrays.toString(i));
         }
     }
+
     public void prindiVäli(String[][] x) {
         for (String[] i : x) {
             System.out.println(Arrays.toString(i));
         }
     }
+
     public void prindiVäli(String[][] x, String[][] y) {
         int n = x.length;
         for (int i = 0; i < n; i++) {

@@ -1,5 +1,5 @@
 public class KuvaVäli extends Väli {
-    private String[][] Väli;
+    private final String[][] Väli;
 
     public KuvaVäli(String[][] Väli) {
         this.Väli = Väli;

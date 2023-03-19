@@ -1,5 +1,5 @@
 public class MänguVäli extends Väli {
-    private boolean[][] väli;
+    private final boolean[][] väli;
 
     public MänguVäli(boolean[][] väli) {
         this.väli = väli;
@@ -13,7 +13,7 @@ public class MänguVäli extends Väli {
         this.väli[i][j] = false;
     }
 
-    public void lisaPaat(int i, int j){
+    public void lisaPaat(int i, int j) {
         this.väli[i][j] = true;
     }
 
