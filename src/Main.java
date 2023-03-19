@@ -27,12 +27,14 @@ public class Main {
         paigutaLaevad(playerBoolean, paatideArv);
         KuvaVäli playerString = new KuvaVäli(teeVäliString(playerBoolean.getVäli()));
 
+        //Mäng algab
         System.out.println("Mäng algab!");
         System.out.println("Vasakul: sinu laevad; Paremal: vastase laevad");
         mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
 
     }
 
+    //genereerib suvalise n*n boolean maatriksi, milles etteantud arv ühtesi
     public static boolean[][] teeVäliBoolean(int n, int laevu) {
         boolean[][] väli = new boolean[n][n];
         for (int i = 0; i < n; i++) {
@@ -53,7 +55,7 @@ public class Main {
         }
         return väli;
     }
-
+    //teeb uue maatriksi vastavalt etteantud boolean maatriksile, kus true="+" ja false="-"
     public static String[][] teeVäliString(boolean[][] x) {
         int n = x.length;
         String[][] väli = new String[n][n];
@@ -68,7 +70,7 @@ public class Main {
         }
         return väli;
     }
-
+    //loob n*n maatriksi mille kõikidel kohtadel "."
     public static String[][] teeVäliString(int n) {
         String[][] väli = new String[n][n];
         for (int i = 0; i < n; i++) {
@@ -78,7 +80,7 @@ public class Main {
         }
         return väli;
     }
-
+    //küsib mängijalt välja suuruse ja paatide arvu
     public static int[] küsiSuurusPaat() throws IOException {
         int[] väärtused = new int[2];
 
@@ -96,13 +98,13 @@ public class Main {
 
         return väärtused;
     }
-
+    //kontrollib kas mängija antud väärtused sobivad
     public static boolean kontrolliVäärtused(int[] väärtused) {
         if (väärtused[0] >= 2 && väärtused[0] <= 10 && väärtused[1] > 0 && väärtused[1] < (väärtused[0]*väärtused[0]))
             return true;
         return false;
     }
-
+    //laseb mängijal paigutada oma laevad
     public static void paigutaLaevad(MänguVäli playerBoolean, int paate) throws IOException {
         System.out.println("Peate väljale paigutama " + paate + " paati!");
         int väljaSuurus = playerBoolean.getVäli().length;
