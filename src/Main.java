@@ -34,6 +34,8 @@ public class Main {
         while (paatideArv > 0) {
             küsiLasku(pcBoolean, pcString);
             mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
+            if (paatideKontroll(pcString))
+                paatideArv--;
         }
         System.out.println("Mäng läbi!");
     }
@@ -154,5 +156,14 @@ public class Main {
                 System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
             }
         }
+    }
+    public static boolean paatideKontroll(KuvaVäli pcString) {
+        int n = pcString.getVäli().length;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                return pcString.getVäli()[i][j].equals("X");
+            }
+        }
+        return false;
     }
 }

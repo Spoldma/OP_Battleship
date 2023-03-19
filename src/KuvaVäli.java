@@ -1,4 +1,4 @@
-public class KuvaVäli extends Väli {
+public class KuvaVäli extends Väli{
     private final String[][] Väli;
 
     public KuvaVäli(String[][] Väli) {
