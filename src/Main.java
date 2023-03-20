@@ -29,8 +29,13 @@ public class Main {
 
         //Mäng algab
         System.out.println("Mäng algab!");
-        System.out.println("Vasakul: sinu laevad; Paremal: vastase laevad");
+        System.out.println("Vasakul on sinu laevad | Paremal on vastase laevad");
         mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
+        while (pcString.loeTäisTabamusi() != paatideArv) {
+            küsiLasku(pcBoolean, pcString, paatideArv);
+            mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
+        }
+        System.out.println("Mäng läbi!");
 
     }
 
@@ -55,6 +60,7 @@ public class Main {
         }
         return väli;
     }
+
     //teeb uue maatriksi vastavalt etteantud boolean maatriksile, kus true="+" ja false="-"
     public static String[][] teeVäliString(boolean[][] x) {
         int n = x.length;
@@ -70,6 +76,7 @@ public class Main {
         }
         return väli;
     }
+
     //loob n*n maatriksi mille kõikidel kohtadel "."
     public static String[][] teeVäliString(int n) {
         String[][] väli = new String[n][n];
@@ -80,6 +87,7 @@ public class Main {
         }
         return väli;
     }
+
     //küsib mängijalt välja suuruse ja paatide arvu
     public static int[] küsiSuurusPaat() throws IOException {
         int[] väärtused = new int[2];
@@ -91,28 +99,51 @@ public class Main {
         System.out.println();
 
         BufferedReader reader2 = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Sisesta paatide arv (0 - suurus**2): ");
+        int maxPaadid = (int) Math.pow(Integer.parseInt(suurus), 2);
+        System.out.print("Sisesta paatide arv (0 - " + maxPaadid + "): ");
         String paatideArv = reader2.readLine();
         väärtused[1] = Integer.parseInt(paatideArv);
         System.out.println();
 
         return väärtused;
     }
+
+    public static void küsiLasku(MänguVäli pcBoolean, KuvaVäli pcString, int paadid) throws IOException {
+        int väljaSuurus = pcBoolean.getVäli().length;
+        int rida = 0;
+        int veerg = 0;
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        System.out.println("Sisesta laskmiseks koordinaadid (rida,veerg): ");
+        String[] koordinaadid = reader.readLine().split(",");
+        rida = Integer.parseInt(koordinaadid[0]);
+        veerg = Integer.parseInt(koordinaadid[1]);
+        if (rida < väljaSuurus && veerg < väljaSuurus && pcBoolean.pihtaMööda(rida, veerg)) {
+            pcBoolean.eemaldaPaat(rida, veerg);
+            pcString.uuendaVäli(rida, veerg, true);
+            System.out.println("Pihtas!");
+        } else if (rida < väljaSuurus && Integer.parseInt(koordinaadid[1]) < väljaSuurus) {
+            pcBoolean.lisaPaat(rida, veerg);
+            pcString.uuendaVäli(rida, veerg, false);
+            System.out.println("Lasid mööda, proovi veel!");
+        } else {
+            System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
+        }
+    }
+
     //kontrollib kas mängija antud väärtused sobivad
     public static boolean kontrolliVäärtused(int[] väärtused) {
-        if (väärtused[0] >= 2 && väärtused[0] <= 10 && väärtused[1] > 0 && väärtused[1] < (väärtused[0]*väärtused[0]))
-            return true;
-        return false;
+        return väärtused[0] >= 2 && väärtused[0] <= 10 && väärtused[1] > 0 && väärtused[1] < (väärtused[0] * väärtused[0]);
     }
+
     //laseb mängijal paigutada oma laevad
     public static void paigutaLaevad(MänguVäli playerBoolean, int paate) throws IOException {
-        System.out.println("Peate väljale paigutama " + paate + " paati!");
+        System.out.println("Väljale paigutavate paatide arv: " + paate);
         int väljaSuurus = playerBoolean.getVäli().length;
         int paateAlles = paate;
         while (paateAlles > 0) {
-            System.out.println("Teie praegune väli näeb välja nii: ");
+            System.out.println("Sinu praegune väli on selline: ");
             playerBoolean.prindiVäli(teeVäliString(playerBoolean.getVäli()));
-            System.out.println("Paate veel sisestada: " +  paateAlles);
+            System.out.println("Paate veel sisestada: " + paateAlles);
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             System.out.print("Sisesta paadi koordinaadid (kujul rida,veerg): ");
             String[] koordinaadid = reader.readLine().split(",");
