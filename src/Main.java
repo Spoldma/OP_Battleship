@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
         //ns Väli isend
         Väli mäng = new Väli();
 
@@ -31,8 +31,18 @@ public class Main {
         System.out.println("Mäng algab!");
         System.out.println("Vasakul on sinu laevad | Paremal on vastase laevad");
         mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
-        while (pcString.loeTäisTabamusi() != paatideArv) {
-            küsiLasku(pcBoolean, pcString, paatideArv);
+        while (pcString.loeTäisTabamusi() != paatideArv && playerString.loeTäisTabamusi() != paatideArv) {
+            küsiLasku(pcBoolean, pcString);
+            mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
+            System.out.println("Vaenlase kord");
+            Thread.sleep(1000);
+            System.out.print(". ");
+            Thread.sleep(1000);
+            System.out.print(". ");
+            Thread.sleep(1000);
+            System.out.println(". ");
+            Thread.sleep(1000);
+            arvutiLasud(playerBoolean, playerString);
             mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
         }
         System.out.println("Mäng läbi!");
@@ -108,25 +118,59 @@ public class Main {
         return väärtused;
     }
 
-    public static void küsiLasku(MänguVäli pcBoolean, KuvaVäli pcString, int paadid) throws IOException {
+    public static void küsiLasku(MänguVäli pcBoolean, KuvaVäli pcString) throws IOException {
         int väljaSuurus = pcBoolean.getVäli().length;
         int rida = 0;
         int veerg = 0;
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Sisesta laskmiseks koordinaadid (rida,veerg): ");
-        String[] koordinaadid = reader.readLine().split(",");
-        rida = Integer.parseInt(koordinaadid[0]);
-        veerg = Integer.parseInt(koordinaadid[1]);
-        if (rida < väljaSuurus && veerg < väljaSuurus && pcBoolean.pihtaMööda(rida, veerg)) {
-            pcBoolean.eemaldaPaat(rida, veerg);
-            pcString.uuendaVäli(rida, veerg, true);
-            System.out.println("Pihtas!");
-        } else if (rida < väljaSuurus && Integer.parseInt(koordinaadid[1]) < väljaSuurus) {
-            pcBoolean.lisaPaat(rida, veerg);
-            pcString.uuendaVäli(rida, veerg, false);
-            System.out.println("Lasid mööda, proovi veel!");
-        } else {
-            System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
+
+        while (true) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Sisesta laskmiseks koordinaadid (rida,veerg): ");
+            String[] koordinaadid = reader.readLine().split(",");
+            rida = Integer.parseInt(koordinaadid[0]);
+            veerg = Integer.parseInt(koordinaadid[1]);
+            try {
+                if (!pcString.getVäli()[rida][veerg].equals("X") && !pcString.getVäli()[rida][veerg].equals("O")) {
+
+                    if (rida < väljaSuurus && veerg < väljaSuurus && pcBoolean.pihtaMööda(rida, veerg)) {
+                        pcBoolean.eemaldaPaat(rida, veerg);
+                        pcString.uuendaVäli(rida, veerg, true);
+                        System.out.println("Pihtas!");
+                        break;
+                    } else if (rida < väljaSuurus && veerg < väljaSuurus) {
+                        pcBoolean.lisaPaat(rida, veerg);
+                        pcString.uuendaVäli(rida, veerg, false);
+                        System.out.println("Lasid mööda, proovi veel!");
+                        break;
+                    }
+                } else {
+                    System.out.println("Juba lasid sinna, proovi uuesti!");
+                }
+            } catch (Exception e) {
+                System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
+
+            }
+        }
+    }
+
+    public static void arvutiLasud(MänguVäli playerBoolean, KuvaVäli playerString) {
+        int väljaSuurus = playerBoolean.getVäli().length;
+
+        System.out.println("Vaenlane tegi lasu!");
+        while (true) {
+            int rida = (int) (Math.random() * väljaSuurus);
+            int veerg = (int) (Math.random() * väljaSuurus);
+            if (!playerString.getVäli()[rida][veerg].equals("X") && !playerString.getVäli()[rida][veerg].equals("O")) {
+                if (playerBoolean.pihtaMööda(rida, veerg)) {
+                    playerBoolean.eemaldaPaat(rida, veerg);
+                    playerString.uuendaVäli(rida, veerg, true);
+                    break;
+                } else {
+                    playerBoolean.lisaPaat(rida, veerg);
+                    playerString.uuendaVäli(rida, veerg, false);
+                    break;
+                }
+            }
         }
     }
 
