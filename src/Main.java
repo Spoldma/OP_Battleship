@@ -29,19 +29,13 @@ public class Main {
 
         //Mäng algab
         System.out.println("Mäng algab!");
-        System.out.println("Vasakul on sinu laevad | Paremal on vastase laevad");
+        System.out.println("Vasakul on sinu laevad | Paremal on vaenlase laevad");
         mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
         while (pcString.loeTäisTabamusi() != paatideArv && playerString.loeTäisTabamusi() != paatideArv) {
             küsiLasku(pcBoolean, pcString);
             mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
-            System.out.println("Vaenlase kord");
-            Thread.sleep(1000);
-            System.out.print(". ");
-            Thread.sleep(1000);
-            System.out.print(". ");
-            Thread.sleep(1000);
-            System.out.println(". ");
-            Thread.sleep(1000);
+            System.out.println("Vaenlase kord!");
+            punkt(1000);
             arvutiLasud(playerBoolean, playerString);
             mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
         }
@@ -131,7 +125,7 @@ public class Main {
             veerg = Integer.parseInt(koordinaadid[1]);
             try {
                 if (!pcString.getVäli()[rida][veerg].equals("X") && !pcString.getVäli()[rida][veerg].equals("O")) {
-
+                    punkt(300);
                     if (rida < väljaSuurus && veerg < väljaSuurus && pcBoolean.pihtaMööda(rida, veerg)) {
                         pcBoolean.eemaldaPaat(rida, veerg);
                         pcString.uuendaVäli(rida, veerg, true);
@@ -140,7 +134,7 @@ public class Main {
                     } else if (rida < väljaSuurus && veerg < väljaSuurus) {
                         pcBoolean.lisaPaat(rida, veerg);
                         pcString.uuendaVäli(rida, veerg, false);
-                        System.out.println("Lasid mööda, proovi veel!");
+                        System.out.println("Lasid mööda!");
                         break;
                     }
                 } else {
@@ -156,7 +150,6 @@ public class Main {
     public static void arvutiLasud(MänguVäli playerBoolean, KuvaVäli playerString) {
         int väljaSuurus = playerBoolean.getVäli().length;
 
-        System.out.println("Vaenlane tegi lasu!");
         while (true) {
             int rida = (int) (Math.random() * väljaSuurus);
             int veerg = (int) (Math.random() * väljaSuurus);
@@ -164,10 +157,12 @@ public class Main {
                 if (playerBoolean.pihtaMööda(rida, veerg)) {
                     playerBoolean.eemaldaPaat(rida, veerg);
                     playerString.uuendaVäli(rida, veerg, true);
+                    System.out.println("Vaenlane lasi pihta!");
                     break;
                 } else {
                     playerBoolean.lisaPaat(rida, veerg);
                     playerString.uuendaVäli(rida, veerg, false);
+                    System.out.println("Vaenlane lasi mööda!");
                     break;
                 }
             }
@@ -199,5 +194,15 @@ public class Main {
                 System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
             }
         }
+    }
+
+    public static void  punkt(int aeg) throws InterruptedException {
+        Thread.sleep(aeg);
+        System.out.print(". ");
+        Thread.sleep(aeg);
+        System.out.print(". ");
+        Thread.sleep(aeg);
+        System.out.println(". ");
+        Thread.sleep(aeg);
     }
 }
