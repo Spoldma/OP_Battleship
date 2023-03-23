@@ -8,17 +8,9 @@ public class Main {
         Väli mäng = new Väli();
 
         //kui suur väli + arvuti genereeritud väljad
-        int[] väärtused = küsiSuurusPaat();
-        while (true) {
-            if (kontrolliVäärtused(väärtused)) {
-                System.out.println("Sisestati sobivad väärtused!");
-                break;
-            }
-            System.out.println("Sisestati sobimatud väärtused! Proovi uuesti!");
-            väärtused = küsiSuurusPaat();
-        }
-        int väljaSuurus = väärtused[0];
-        int paatideArv = väärtused[1];
+        int väljaSuurus = küsiSuurus();
+        int paatideArv = küsiPaat(väljaSuurus);
+
         MänguVäli pcBoolean = new MänguVäli(teeVäliBoolean(väljaSuurus, paatideArv));
         KuvaVäli pcString = new KuvaVäli(teeVäliString(väljaSuurus));
 
@@ -31,6 +23,7 @@ public class Main {
         System.out.println("Mäng algab!");
         System.out.println("Vasakul on sinu laevad | Paremal on vaenlase laevad");
         mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
+
         while (pcString.loeTäisTabamusi() != paatideArv && playerString.loeTäisTabamusi() != paatideArv) {
             küsiLasku(pcBoolean, pcString);
             mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
@@ -93,23 +86,48 @@ public class Main {
     }
 
     //küsib mängijalt välja suuruse ja paatide arvu
-    public static int[] küsiSuurusPaat() throws IOException {
-        int[] väärtused = new int[2];
+    public static int küsiSuurus() throws IOException {
+        int suurus = 0;
+        while (true) {
+            try {
+                BufferedReader reader1 = new BufferedReader(new InputStreamReader(System.in));
+                System.out.print("Sisesta välja suurus (2 - 10): ");
+                String sõne = reader1.readLine();
 
-        BufferedReader reader1 = new BufferedReader(new InputStreamReader(System.in));
-        System.out.print("Sisesta välja suurus (2 - 10): ");
-        String suurus = reader1.readLine();
-        väärtused[0] = Integer.parseInt(suurus);
-        System.out.println();
+                suurus = Integer.parseInt(sõne);
+                if (suurus < 2 || suurus > 10){
+                    System.out.println("Sisestatud andmed ei sobi! Proovi uuesti!");
+                    continue;
+                }
+                break;
 
-        BufferedReader reader2 = new BufferedReader(new InputStreamReader(System.in));
-        int maxPaadid = (int) Math.pow(Integer.parseInt(suurus), 2);
-        System.out.print("Sisesta paatide arv (0 - " + maxPaadid + "): ");
-        String paatideArv = reader2.readLine();
-        väärtused[1] = Integer.parseInt(paatideArv);
-        System.out.println();
+            }catch(Exception e) {
+                System.out.println("Sisestatud andmed ei sobi! Proovi uuesti!");
+            }
+        }
+        return suurus;
+    }
 
-        return väärtused;
+    public static int küsiPaat(int suurus) throws IOException {
+        int paate = 0;
+        while (true) {
+            try {
+                BufferedReader reader2 = new BufferedReader(new InputStreamReader(System.in));
+                int maxPaadid = (int) (Math.pow(suurus, 2))-1;
+                System.out.print("Sisesta paatide arv (1 - " + maxPaadid + "): ");
+                String paatideArv = reader2.readLine();
+                paate = Integer.parseInt(paatideArv);
+                if (paate < 1 || paate > maxPaadid){
+                    System.out.println("Sisestatud andmed ei sobi! Proovi uuesti!");
+                    continue;
+                }
+                System.out.println();
+                break;
+            }catch(Exception e) {
+                System.out.println("Sisestatud andmed ei sobi! Proovi uuesti!");
+            }
+        }
+        return paate;
     }
 
     public static void küsiLasku(MänguVäli pcBoolean, KuvaVäli pcString) throws IOException {
@@ -118,12 +136,12 @@ public class Main {
         int veerg = 0;
 
         while (true) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            System.out.println("Sisesta laskmiseks koordinaadid (rida,veerg): ");
-            String[] koordinaadid = reader.readLine().split(",");
-            rida = Integer.parseInt(koordinaadid[0]);
-            veerg = Integer.parseInt(koordinaadid[1]);
             try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                System.out.print("Sisesta laskmiseks koordinaadid (rida,veerg): ");
+                String[] koordinaadid = reader.readLine().split(",");
+                rida = Integer.parseInt(koordinaadid[0]);
+                veerg = Integer.parseInt(koordinaadid[1]);
                 if (!pcString.getVäli()[rida][veerg].equals("X") && !pcString.getVäli()[rida][veerg].equals("O")) {
                     punkt(300);
                     if (rida < väljaSuurus && veerg < väljaSuurus && pcBoolean.pihtaMööda(rida, veerg)) {
@@ -169,28 +187,31 @@ public class Main {
         }
     }
 
-    //kontrollib kas mängija antud väärtused sobivad
-    public static boolean kontrolliVäärtused(int[] väärtused) {
-        return väärtused[0] >= 2 && väärtused[0] <= 10 && väärtused[1] > 0 && väärtused[1] < (väärtused[0] * väärtused[0]);
-    }
-
     //laseb mängijal paigutada oma laevad
     public static void paigutaLaevad(MänguVäli playerBoolean, int paate) throws IOException {
         System.out.println("Väljale paigutavate paatide arv: " + paate);
         int väljaSuurus = playerBoolean.getVäli().length;
         int paateAlles = paate;
         while (paateAlles > 0) {
-            System.out.println("Sinu praegune väli on selline: ");
-            playerBoolean.prindiVäli(teeVäliString(playerBoolean.getVäli()));
-            System.out.println("Paate veel sisestada: " + paateAlles);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            System.out.print("Sisesta paadi koordinaadid (kujul rida,veerg): ");
-            String[] koordinaadid = reader.readLine().split(",");
-            if (Integer.parseInt(koordinaadid[0]) < väljaSuurus && Integer.parseInt(koordinaadid[1]) < väljaSuurus) {
-                playerBoolean.lisaPaat(Integer.parseInt(koordinaadid[0]), Integer.parseInt(koordinaadid[1]));
-                System.out.println();
-                paateAlles--;
-            } else {
+            try {
+                System.out.println("Sinu praegune väli on selline: ");
+                playerBoolean.prindiVäli(teeVäliString(playerBoolean.getVäli()));
+                System.out.println("Paate veel sisestada: " + paateAlles);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+                System.out.print("Sisesta paadi koordinaadid (kujul rida,veerg): ");
+                String[] koordinaadid = reader.readLine().split(",");
+                if (Integer.parseInt(koordinaadid[0]) < väljaSuurus && Integer.parseInt(koordinaadid[1]) < väljaSuurus) {
+                    if (!playerBoolean.getVäli()[Integer.parseInt(koordinaadid[0])][Integer.parseInt(koordinaadid[1])]) {
+                        playerBoolean.lisaPaat(Integer.parseInt(koordinaadid[0]), Integer.parseInt(koordinaadid[1]));
+                        System.out.println();
+                        paateAlles--;
+                    } else {
+                        System.out.println("Seal on juba paat, proovi uuesti!");
+                    }
+                } else {
+                    System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
+                }
+            }catch (Exception e) {
                 System.out.println("Sisestatud koordinaadid pole väljal! Proovi uuesti!");
             }
         }
