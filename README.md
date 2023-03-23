@@ -1,7 +1,7 @@
 # OP_Battleship
-coolest
+"COOLEST"
 
-Game made using Object-oriented Java
+Game made using object-oriented Java
 
 Programmers - Sander Põldma, Gerdo Germann
 
