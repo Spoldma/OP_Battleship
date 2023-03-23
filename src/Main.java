@@ -34,13 +34,20 @@ public class Main {
         while (pcString.loeTäisTabamusi() != paatideArv && playerString.loeTäisTabamusi() != paatideArv) {
             küsiLasku(pcBoolean, pcString);
             mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
-            System.out.println("Vaenlase kord!");
-            punkt(1000);
-            arvutiLasud(playerBoolean, playerString);
-            mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
+            if (pcString.loeTäisTabamusi() != paatideArv) {
+                System.out.println("Vaenlase kord!");
+                punkt(1000);
+                arvutiLasud(playerBoolean, playerString);
+                mäng.prindiVäli(playerString.getVäli(), pcString.getVäli());
+            }
+            else
+                continue;
         }
-        System.out.println("Mäng läbi!");
-
+        if (pcString.loeTäisTabamusi() > playerString.loeTäisTabamusi()) {
+            System.out.println("Mäng läbi, võitsid sina!");
+        }
+        else
+            System.out.println("Mäng läbi! Võitis vaenalne");
     }
 
     //genereerib suvalise n*n boolean maatriksi, milles etteantud arv ühtesi
